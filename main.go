@@ -12,7 +12,7 @@ func say(s string) {
         }
 }
 func main() {
-        go say("world")
+        say("world")
         say("hello")
         fmt.Println("Finished")
 }
