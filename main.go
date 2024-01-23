@@ -6,16 +6,17 @@ import (
 )
 
 func sayHello(wg *sync.WaitGroup, pingChannel chan string, pongChannel chan string) {
+	
         for i := 0; i < 5; i++ {
                 fmt.Println("Hello")
 		pingChannel <- "World"
 		<-pongChannel 
-        }
+	}
 	wg.Done()
 }
 func sayWorld(wg *sync.WaitGroup, pingChannel chan string, pongChannel chan string) {
         for i := 0; i < 5; i++ {
-		v := <-pongChannel
+		v := <-pingChannel
                 fmt.Println(v)
 		pongChannel <- "pong"
         }
