@@ -1,23 +1,26 @@
 package main
 
 import (
-        "fmt"
+	"fmt"
 	"sync"
+	"time"
 )
 
 func sayHello(wg *sync.WaitGroup, pingChannel chan string, pongChannel chan string) {
 	
-        for i := 0; i < 5; i++ {
-                fmt.Println("Hello")
-		pingChannel <- "World"
-		<-pongChannel 
+    for i := 0; i < 100; i++ {
+            fmt.Printf("\nHello ")
+		    pingChannel <- "World!"
+		    <-pongChannel
+            time.Sleep(1 * time.Second)
 	}
 	wg.Done()
 }
 func sayWorld(wg *sync.WaitGroup, pingChannel chan string, pongChannel chan string) {
-        for i := 0; i < 5; i++ {
+        for i := 0; i < 100; i++ {
 		v := <-pingChannel
-                fmt.Println(v)
+
+        fmt.Printf(v)
 		pongChannel <- "pong"
         }
 	wg.Done()
@@ -32,9 +35,9 @@ func main() {
 	go sayHello(&wg, pingChannel, pongChannel)
 
 	wg.Add(1)
-        go sayWorld(&wg, pingChannel, pongChannel)
+    go sayWorld(&wg, pingChannel, pongChannel)
 
         wg.Wait()
 
-        fmt.Println("Finished")
+        fmt.Println("\nFinished")
 }
